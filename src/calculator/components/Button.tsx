@@ -39,6 +39,7 @@ const Button = ({onClick, label, value, type}: Props) => {
         <StyledButton
             onClick={onClick}
             data-value={value}
+            data-type={type}
             className={type}
         >
             {label}

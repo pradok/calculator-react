@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import {calculateOperations} from '../../utils';
 import Button from './Button';
 import Display from './Display';
 import {simpleLayoutItems} from "./config";
@@ -30,16 +31,53 @@ const KeypadsStyled = styled.div`
 KeypadsStyled.displayName = 'KeypadsStyled';
 
 class Calculator extends React.Component {
+    state = {
+      operations: []
+    };
+
+    calculate = () => {
+        const output = calculateOperations(this.state.operations);
+        if (output) {
+            this.setState({operations: output});
+        }
+    };
+
+    handleClick = (e: React.MouseEvent<HTMLElement>) => {
+        const value = e.currentTarget.dataset.value;
+        const type = e.currentTarget.dataset.type;
+        switch (value) {
+            case 'clear':
+                this.setState({
+                    operations: [],
+                });
+                break;
+            case '=':
+                this.calculate();
+                break;
+            default:
+                if ((type === 'operator' || type === 'decimal') && !this.state.operations.length) {
+                    return;
+                }
+                this.setState({operations: [...this.state.operations, value]});
+                break;
+        }
+    };
+
+
     render() {
         return (
             <ContainerStyled>
                 <SubContainerStyled>
-                    <Display operationResult={''}/>
+                    <Display operationResult={this.state.operations}/>
                     <KeypadsStyled>
                         {
-                            simpleLayoutItems.map(buttonItem => {
+                            simpleLayoutItems.map((buttonItem, index) => {
                                 const {label, value, type} = buttonItem;
-                                return <Button label={label} value={value} type={type} key={label} />
+                                if (buttonItem.type === 'null') {
+                                    return <Button label={label} value={value} type={type} key={`${index}${label}`}/>
+                                }
+                                return <Button onClick={this.handleClick} label={label} value={value} type={type}
+                                               key={`${index}${label}`}/>
                             })
                         }
                     </KeypadsStyled>
