@@ -9,9 +9,10 @@ import Button from '../Button';
 describe ('<Button />', () => {
     it('renders with correct label and value', () => {
         const mockClickHandler = jest.fn();
-        const button = shallow(<Button onClick={mockClickHandler} label='2' value='2' />)
+        const button = shallow(<Button onClick={mockClickHandler} label='2' value='2' type="number" />)
         expect(button.text()).toEqual('2');
         expect(button.find('[data-value="2"]')).toHaveLength(1);
+        expect(button.find('[className="number"]')).toHaveLength(1);
         button.find('StyledButton').simulate('click', {
             target: {dataset: {value: '2'}}
         });
