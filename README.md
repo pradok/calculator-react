@@ -1,3 +1,8 @@
+## Outstanding features
+• Accessible implementation
+• Error handling 
+• Optional options: ^ (Square by N), Square Root 
+
 ## Available Scripts
 
 In the project directory, you can run:
